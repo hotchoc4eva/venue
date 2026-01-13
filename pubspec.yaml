@@ -1,0 +1,62 @@
+name: venue
+description: "A luxury venue booking mobile application."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # --- FIREBASE CORE & SERVICES ---
+  # Required to initialize Firebase
+  firebase_core: ^3.6.0
+  # For user login (Guest/User/Admin)
+  firebase_auth: ^5.3.1 
+  # For the Database (Users, Halls, Bookings)
+  cloud_firestore: ^5.4.4
+  # For storing hall images
+  firebase_storage: ^12.3.2
+
+  # --- STATE MANAGEMENT & ARCHITECTURE ---
+  # To handle State (MVVM ViewModel)
+  provider: ^6.1.2
+  # For navigation logic
+  go_router: ^14.2.7
+  
+  # --- UI & DESIGN ---
+  # For "Luxury" Typography (Instrument Serif, Inter)
+  google_fonts: ^6.2.1
+  # For Admin Dashboard Charts
+  fl_chart: ^0.68.0
+  # For loading images efficiently
+  cached_network_image: ^3.3.1
+  # iOS style icons
+  cupertino_icons: ^1.0.8
+
+  # --- UTILITIES ---
+  # For date formatting (e.g., "Mon, 12 Jan")
+  intl: ^0.19.0
+  # For generating unique Booking IDs
+  uuid: ^4.5.1
+  # For picking images from gallery (Admin)
+  image_picker: ^1.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  cached_network_image: ^3.3.0
+flutter:
+  uses-material-design: true
+
+  # --- ASSETS CONFIGURATION ---
+  # Create a folder named 'assets' in your root directory
+  # and a subfolder named 'images' inside it.
+  assets:
+    - assets/images/
