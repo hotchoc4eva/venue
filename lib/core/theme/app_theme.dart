@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 
+//AppTheme centralizes visual identity of app
+//using static getter, we ensurea single source of truth for all ui components
 class AppTheme {
+  //uses Material 3 design srandards for component rendering
   static ThemeData get luxuryTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.darkBackground,
       
-      // Define the Color Scheme
+      // defines color scheme
+      // ColorSchemeis the engine that drives Material 3 component colors
       colorScheme: const ColorScheme.dark(
-        primary: AppColors.primaryGold,
-        secondary: AppColors.primaryGold,
-        surface: AppColors.surfaceGrey,
-        onSurface: AppColors.textWhite,
+        primary: AppColors.primaryGold, //color for buttons and highlghts
+        secondary: AppColors.primaryGold, //secondary accents
+        surface: AppColors.surfaceGrey, //bg for cards and tiles
+        onSurface: AppColors.textWhite, 
         error: AppColors.errorRed,
       ),
 
@@ -36,7 +40,8 @@ class AppTheme {
         ),
       ),
 
-      // Default Card Style (FIXED: CardTheme -> CardThemeData)
+      // Default Card Style 
+      // to eliminate need to manually add padding to every Venue Card
       cardTheme: CardThemeData(
         color: AppColors.surfaceGrey,
         elevation: 4,
