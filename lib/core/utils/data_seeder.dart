@@ -2,19 +2,28 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart'; // For debugPrint
 import '../../models/hall_model.dart';
 
+// DataSeeder handles initial population of the Firestore database
+// ensures Discovery Engine has contents to display
 class DataSeeder {
+  // private instance of FirebaseFirestore to interact with the NoSQL database
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  // performs asynchronous "Seed" operation to upload sample data
+  // [Future<void>] return type indicates it's an asynchronous operation that doesnt return value but must be 'awaited' to ensure completion
   Future<void> seedHalls() async {
     try {
-      // Check if data already exists to prevent duplicates
+      // Check if data already exists to prevent duplicate
+      // 'get()' call is performed first. if snapshot is not empty, we exit the function
+      // critical check to save on Firestore Read/Write costs
       final snapshot = await _db.collection('halls').get();
       if (snapshot.docs.isNotEmpty) {
         debugPrint("Registry already populated. Skipping seed.");
         return;
       }
 
-      // List of Curated Luxury Venues
+      // List of data
+      // 'HallModel' objects are instantiated
+      // 'amenities' List is used to demonstrate Firestore's ability to store arrays natively
       List<HallModel> sampleHalls = [
         HallModel(
           id: 'hall_001',
@@ -48,13 +57,17 @@ class DataSeeder {
         ),
       ];
 
-      // Upload Loop
+      // Upload loop
+      // we iterate through the list
+      // for each [HallModel], we use '.set()' because we want to define our own document ids rather than letting firebase generate random string
+      // [hall.toMap()] converts Dart object to JSON-like Map for firestore
       for (var hall in sampleHalls) {
         await _db.collection('halls').doc(hall.id).set(hall.toMap());
       }
       
       debugPrint("SUCCESS: Luxury registry populated with ${sampleHalls.length} venues.");
     } catch (e) {
+      // error handling to catch network failures or permission issues in Firestore
       debugPrint("SEEDING ERROR: $e");
     }
   }
