@@ -1,9 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+// FirebaseAuthService acts as a dedicated wrapper for Firebase Auth SDK
+// this abstraction layer decouples the business logic from the specific authentication provider, making the code easier to maintain and test
 class FirebaseAuthService {
+  // instance of Firebase Authentication entry point
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // 1. Get Current User (Stream)
+  //1. get current user
+  // [authStateChanges] pro
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   // 2. Sign Up (Register)
