@@ -147,7 +147,7 @@ class HallDetailsScreen extends StatelessWidget {
                       style: GoogleFonts.instrumentSerif(fontSize: 26, color: AppColors.primaryGold)
                     ),
                     const SizedBox(height: 16),
-                    // 🟢 Dynamically shows only amenities selected by Admin
+                    // Dynamically shows only amenities selected by Admin
                     Wrap(
                       spacing: 8,
                       runSpacing: 12,
