@@ -67,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
     ),
   );
   }
-  // 🟢 SETTINGS MODAL (Now fully functional)
+  // SETTINGS MODAL 
   void _showSettingsSheet(BuildContext context, AuthProvider auth) {
     showModalBottomSheet(
       context: context,
@@ -97,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                 title: Text('Change Password', style: GoogleFonts.roboto(color: Colors.white)),
                 onTap: () {
                   Navigator.pop(ctx);
-                  _showChangePasswordDialog(context, auth); // Triggers Part 2 Dialog
+                  _showChangePasswordDialog(context, auth); 
                 },
               ),
               const Divider(color: Colors.white10),
@@ -117,7 +117,7 @@ class ProfileScreen extends StatelessWidget {
                 title: Text('Delete Account', style: GoogleFonts.roboto(color: Colors.redAccent)),
                 onTap: () {
                   Navigator.pop(ctx);
-                  _showDeleteAccountDialog(context, auth); // Triggers Part 2 Dialog
+                  _showDeleteAccountDialog(context, auth); 
                 },
               ),
             ],
@@ -127,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // 🟢 USER HEADER WIDGET
+  // USER HEADER WIDGET
   Widget _buildUserHeader(BuildContext context, user) {
     return Container(
       width: double.infinity,
@@ -152,7 +152,7 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-  // 🟢 BOOKING LIST & CANCELLATION LOGIC
+  // BOOKING LIST & CANCELLATION LOGIC
   Widget _buildBookingList(BuildContext context, FirestoreService db, String? uid) {
     if (uid == null) return const Center(child: Text("Guest mode active."));
 
@@ -168,7 +168,7 @@ class ProfileScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final booking = snapshot.data![index];
             final now = DateTime.now();
-            // 🟢 Logic: Check if current time is at least 48 hours before booking
+            // Logic: Check if current time is at least 48 hours before booking
             final bool canCancel = booking.bookingDate.difference(now).inHours >= 48;
 
             return Container(
@@ -223,7 +223,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // 🟢 ACTION: UPDATE RESERVATION (Hydrating the Form)
+  // UPDATE RESERVATION (Hydrating the Form)
   void _handleEditBooking(BuildContext context, BookingModel booking) async {
     final bookingProvider = Provider.of<BookingProvider>(context, listen: false);
     final db = FirestoreService();
@@ -246,7 +246,7 @@ class ProfileScreen extends StatelessWidget {
     }
   }
 
-  // 🟢 DIALOG: EDIT NAME
+  // DIALOG: EDIT NAME
   void _showEditNameDialog(BuildContext context, AuthProvider auth) {
     final controller = TextEditingController(text: auth.currentUser?.name);
     showDialog(
@@ -273,7 +273,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // 🟢 DIALOG: DELETE ACCOUNT (Requires Password)
+  // DIALOG: DELETE ACCOUNT (Requires Password)
   void _showDeleteAccountDialog(BuildContext context, AuthProvider auth) {
     final passController = TextEditingController();
     showDialog(
@@ -309,7 +309,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // 🟢 STATUS BADGE HELPER
+  // STATUS BADGE HELPER
   Widget _buildStatusBadge(String status) {
     Color color;
     String label;
@@ -324,7 +324,7 @@ class ProfileScreen extends StatelessWidget {
       child: Text(label, style: GoogleFonts.roboto(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
     );
   }
-  // 🟢 FIX: Define the missing Cancellation Handler
+  // Define the Cancellation Handler
   void _handleCancellation(BuildContext context, FirestoreService db, BookingModel booking) {
     showDialog(
       context: context,
@@ -353,7 +353,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // 🟢 FIX: Define the missing Password Change Dialog
+  // Define the Password Change Dialog
   void _showChangePasswordDialog(BuildContext context, AuthProvider auth) {
     final currentController = TextEditingController();
     final newController = TextEditingController();
