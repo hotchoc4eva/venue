@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-// 🟢 FIX: Hide the conflicting AuthProvider from Firebase
+// Hide the conflicting AuthProvider from Firebase
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider; 
 import '../../../providers/auth_provider.dart'; 
 import '../../../services/firestore_db.dart';
