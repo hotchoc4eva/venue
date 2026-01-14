@@ -9,9 +9,7 @@ import '../models/booking_model.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // ==========================================
-  //               USER OPERATIONS
-  // ==========================================
+//USER OPERATION
 
   /// Creates a new user document in the 'users' collection.
   Future<void> createUserRecord(UserModel user) async {
@@ -88,7 +86,7 @@ class FirestoreService {
     await _db.collection('halls').doc(hallId).update(data);
   }
 
-  /// 🟢 NEW: Specifically updates the amenity list for a venue.
+  /// Specifically updates the amenity list for a venue.
   /// This allows the Admin to choose exactly what is visible to the user.
   Future<void> updateHallAmenities(String hallId, List<String> selectedAmenities) async {
     await _db.collection('halls').doc(hallId).update({
@@ -106,7 +104,7 @@ class FirestoreService {
   // ==========================================
 
   /// Validates if a specific date for a venue is available.
-  /// 🟢 Logic Update: Now checks for both 'confirmed' AND 'pending' 
+  /// Logic Update: Now checks for both 'confirmed' AND 'pending' 
   /// to prevent double-booking while a request is under review.
   Future<bool> isSlotTaken(String hallId, DateTime date, {String? excludeBookingId}) async {
     DateTime start = DateTime(date.year, date.month, date.day);
