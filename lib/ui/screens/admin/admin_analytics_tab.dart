@@ -57,7 +57,7 @@ class AdminAnalyticsTab extends StatelessWidget {
               
               const SizedBox(height: 32),
 
-              // 🟢 REVENUE HERO CARD
+              // REVENUE HERO CARD
               _buildRevenueHero(totalRevenue, totalEvents, avgRevenue),
 
               const SizedBox(height: 40),
@@ -70,7 +70,7 @@ class AdminAnalyticsTab extends StatelessWidget {
                 )),
               const SizedBox(height: 16),
 
-              // 🟢 TRANSACTION LIST
+              // TRANSACTION LIST
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
