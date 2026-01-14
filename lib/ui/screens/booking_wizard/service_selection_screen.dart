@@ -21,7 +21,7 @@ class ServiceSelectionScreen extends StatelessWidget {
         ),
       ),
       
-      // 🟢 LUXURY PRICE FOOTER (Roboto for Numbers)
+      // LUXURY PRICE FOOTER (Roboto for Numbers)
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         decoration: BoxDecoration(
@@ -113,7 +113,6 @@ class ServiceSelectionScreen extends StatelessWidget {
                   child: CheckboxListTile(
                     activeColor: AppColors.primaryGold,
                     checkColor: Colors.black,
-                    // 🟢 FIXED PARAMETER NAME
                     controlAffinity: ListTileControlAffinity.trailing,
                     title: Text(name, 
                       style: GoogleFonts.roboto(
