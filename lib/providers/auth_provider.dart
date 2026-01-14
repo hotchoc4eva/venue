@@ -4,33 +4,41 @@ import '../services/firebase_auth_service.dart';
 import '../services/firestore_db.dart';
 import '../models/user_model.dart';
 
+// AuthProvider manages global authentication state and user profile
+// acts as a ViewModel in the MVVM pattern,bridging UI and Firebase Services
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuthService _authService = FirebaseAuthService();
   final FirestoreService _dbService = FirestoreService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  UserModel? _currentUser;
-  bool _isLoading = false;
+  // local state variable
+  UserModel? _currentUser; // holds our custom User data
+  bool _isLoading = false; // used to trigger loading spinners in the UI
 
+  // getters for Reactive UI updates
   UserModel? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
   bool get isLoggedIn => _currentUser != null;
-  bool get isAdmin => _currentUser?.role == 'admin';
-
+  bool get isAdmin => _currentUser?.role == 'admin'; // RBAC check
+  
   User? get user => _auth.currentUser;
 
+  // constructor initialises listener immediately upon app launch
   AuthProvider() {
     _init();
   }
 
+  // listens to the Firebase Auth Stream
+  // if user logs in/out elsewhere, app reacts automatically
   void _init() {
     _authService.authStateChanges.listen((User? firebaseUser) async {
       if (firebaseUser != null) {
+        // fetch extended profile from Firestore (role, display name, etc)
         _currentUser = await _dbService.getUserData(firebaseUser.uid);
       } else {
         _currentUser = null;
       }
-      notifyListeners();
+      notifyListeners(); // forces ui to rebuild, like switching login screen to home
     });
   }
 
@@ -43,7 +51,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     try {
       await _authService.signIn(email: email, password: password);
-      return null;
+      return null; // null return signifies success in our pattern
     } catch (e) {
       return e.toString();
     } finally {
@@ -52,6 +60,9 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // registration handles a 2 step process
+  // 1. create entry in Firebase Auth (Credentials)
+  // 2. create entry in Firestore (Profile Metadata)
   Future<String?> register(String email, String password, String name) async {
     _isLoading = true;
     notifyListeners();
@@ -74,7 +85,8 @@ class AuthProvider extends ChangeNotifier {
   //          ACCOUNT MANAGEMENT LOGIC
   // ==========================================
 
-  /// 🟢 NEW: Direct in-app password change with re-authentication
+  // SECURITY FEATURE: re-autheentication logic
+  // Firebase requires fresh login (credentials) before allowing password changes  or account deletion 
   Future<String?> changePasswordInApp({
     required String currentPassword,
     required String newPassword,
@@ -86,7 +98,7 @@ class AuthProvider extends ChangeNotifier {
       User? user = _auth.currentUser;
       if (user == null || user.email == null) return "User session not found.";
 
-      // 1. Re-authenticate for security (Required by Firebase for password changes)
+      // 1. re-authentication gate (required by Firebase for password changes)
       AuthCredential credential = EmailAuthProvider.credential(
         email: user.email!,
         password: currentPassword,
@@ -94,10 +106,10 @@ class AuthProvider extends ChangeNotifier {
 
       await user.reauthenticateWithCredential(credential);
 
-      // 2. Perform the password update
+      // 2. perform the password update
       await user.updatePassword(newPassword);
       
-      return null; // Success
+      return null; 
     } on FirebaseAuthException catch (e) {
       return e.message;
     } catch (e) {
@@ -108,17 +120,23 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // UPDATING USER PROFILE: handles 'Synchronous Update' across 3 different layers: Firebase Auth, Cloud Firestore, Local State
   Future<String?> updateDisplayName(String newName) async {
     try {
       _isLoading = true;
-      notifyListeners();
+      notifyListeners(); // trigger UI loading state
 
+      //1. update firebase auth
       await _auth.currentUser?.updateDisplayName(newName);
-      
+
+      //2. update cloud firestore
       await _dbService.updateUserRecord(_auth.currentUser!.uid, {
         'name': newName,
       });
 
+      //3. update local state
+      // we manually rebuild [_currentUser_] object
+      // since 'UserModel' is immutable, we create new instance to reflect change in UI immediately without page refresh
       if (_currentUser != null) {
         _currentUser = UserModel(
           uid: _currentUser!.uid,
@@ -128,16 +146,16 @@ class AuthProvider extends ChangeNotifier {
         );
       }
       
-      return null;
+      return null; // success
     } catch (e) {
-      return e.toString();
+      return e.toString(); // return error
     } finally {
       _isLoading = false;
-      notifyListeners();
+      notifyListeners(); // stop loading state
     }
   }
 
-  /// 🟢 UPDATED: Account deletion with safety re-authentication check
+  // ACCOUNT DELETION: cleans up both database records and auth credentials
   Future<String?> deleteAccountWithPassword(String currentPassword) async {
     try {
       _isLoading = true;
@@ -146,14 +164,14 @@ class AuthProvider extends ChangeNotifier {
       User? user = _auth.currentUser;
       if (user == null || user.email == null) return "User session not found.";
 
-      // 1. Re-authenticate before final deletion
+      // 1. re-authenticate before final deletion as final security check
       AuthCredential credential = EmailAuthProvider.credential(
         email: user.email!,
         password: currentPassword,
       );
       await user.reauthenticateWithCredential(credential);
 
-      // 2. Delete Firestore data and Auth record
+      // 2. Delete data from Firestore first, then Auth 
       await _dbService.deleteUser(user.uid);
       await user.delete();
       
@@ -173,12 +191,20 @@ class AuthProvider extends ChangeNotifier {
   //               EXIT LOGIC
   // ==========================================
 
+  // signOut handles graceful termination of user session
   Future<void> signOut() async {
+    //1. clear cloud session
+    // notifies firebase to invalidate the local token
     await _authService.signOut();
+    //2. clear local memory
+    // 'ghost' data from being visible if a different user logs in later
     _currentUser = null;
+    //3. rebuild ui
+    // redirects user back to the Auth wrapper
     notifyListeners();
   }
 
+  // alias for signOut to match naming conventions
   Future<void> logout() async {
     await signOut();
   }
