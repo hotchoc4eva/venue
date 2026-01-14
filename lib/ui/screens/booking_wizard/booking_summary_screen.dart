@@ -184,11 +184,11 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
             'bookingDate': provider.selectedDate!,
             'totalPrice': provider.totalPrice,
             'selectedServices': provider.selectedServices.toList(),
-            'paxCount': int.tryParse(provider.paxCount) ?? 0, // 🟢 Add this line
+            'paxCount': int.tryParse(provider.paxCount) ?? 0, 
             'status': 'pending', 
           });
         } else {
-        // 🟢 NEW BOOKINGS: Set status to 'pending'
+        // NEW BOOKINGS: Set status to 'pending'
         final newBooking = BookingModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(), 
           userId: user?.uid ?? 'guest',
@@ -199,7 +199,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
           totalPrice: provider.totalPrice,
           status: 'pending', 
           selectedServices: provider.selectedServices.toList(),
-          paxCount: int.tryParse(provider.paxCount) ?? 0, // 🟢 Add this line to fix the error
+          paxCount: int.tryParse(provider.paxCount) ?? 0, 
         );
         await _dbService.createBooking(newBooking);
       }
