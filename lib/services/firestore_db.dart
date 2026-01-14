@@ -99,9 +99,7 @@ class FirestoreService {
     await _db.collection('halls').doc(hallId).delete();
   }
 
-  // ==========================================
-  //             BOOKING OPERATIONS
-  // ==========================================
+// HALL OPERATIONS
 
   /// Validates if a specific date for a venue is available.
   /// Logic Update: Now checks for both 'confirmed' AND 'pending' 
