@@ -85,7 +85,7 @@ class AdminVenuesTab extends StatelessWidget {
     );
   }
 
-  // --- INTEGRATED DIALOG WITH AMENITY CHECKLIST ---
+  // INTEGRATED DIALOG WITH AMENITY CHECKLIST 
   void _showHallDialog(BuildContext context, FirestoreService db, HallModel? hall) {
     final isEditing = hall != null;
     final nameController = TextEditingController(text: hall?.name);
