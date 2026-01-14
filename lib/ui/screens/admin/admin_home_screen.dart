@@ -6,7 +6,7 @@ import '../../../providers/auth_provider.dart';
 import '../login_screen.dart';
 
 // Import the tabs
-import 'admin_analytics_tab.dart'; // 🟢 New
+import 'admin_analytics_tab.dart'; 
 import 'admin_bookings_tab.dart';
 import 'admin_venues_tab.dart';
 import 'admin_users_tab.dart';
@@ -24,7 +24,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    // 🟢 Updated length to 4 to include Analytics
     _tabController = TabController(length: 4, vsync: this);
   }
 
@@ -80,7 +79,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
       body: TabBarView(
         controller: _tabController,
         children: const [
-          AdminAnalyticsTab(), // 🟢 First Tab: Financial Overview
+          AdminAnalyticsTab(), // First Tab: Financial Overview
           AdminBookingsTab(),  // Second Tab: Management
           AdminVenuesTab(),    // Third Tab: Inventory
           AdminUsersTab(),     // Fourth Tab: Access Control
