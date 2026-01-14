@@ -15,7 +15,7 @@ class VenueApp extends StatelessWidget {
       title: 'Luxury Venue Booking',
       debugShowCheckedModeBanner: false,
       
-      // --- THEME SETUP (Instrument Serif + Roboto Pairing) ---
+      // THEME SETUP (Instrument Serif + Roboto Pairing) 
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.black,
         
